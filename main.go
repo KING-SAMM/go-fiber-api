@@ -2,6 +2,7 @@ package main
 
 import (
 	"github.com/gofiber/fiber/v2"
+	"github.com/KING-SAMM/go-fiber-api/user"
 )
 
 func hello(c *fiber.Ctx) error {
@@ -9,6 +10,7 @@ func hello(c *fiber.Ctx) error {
 }
 
 func main() {
+	user.initialMigration()
 	app := fiber.New()
 
 	app.Get("/", hello)
