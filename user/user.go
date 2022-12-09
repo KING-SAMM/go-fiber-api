@@ -2,7 +2,6 @@ package user
 
 import (
 	"fmt"
-	"mysql"
 	"gorm.io/gorm"
 )
 
@@ -26,4 +25,25 @@ func initialMigration() {
 		panic("Cannot connect to database!")
 	}
 	DB.AutoMigrate(&User{})
+}
+
+func GetUsers(c *fiber.Ctx) error {
+
+}
+func GetUser(c *fiber.Ctx) error {
+
+}
+func SaveUser(c *fiber.Ctx) error {
+	user := new(User)
+	if err := c.BodyParser(user); err != nil {
+		return c.Status(500).SendString(err.Error())
+	}
+	DB.Save(&user)
+	return c.JSON(&user)
+}
+func DeleteUser(c *fiber.Ctx) error {
+
+}
+func UpdateUser(c *fiber.Ctx) error {
+
 }
