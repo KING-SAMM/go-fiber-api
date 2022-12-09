@@ -2,13 +2,16 @@ package user
 
 import (
 	"fmt"
+	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"github.com/gofiber/fiber/v2"
+	// "github.com/go-sql-driver/mysql"
 )
 
 var DB *gorm.DB
 var err error
 
-const DNS = "root:admin@tcp(127.0.0.1:3308)/godb?charset=utf8"
+const DNS = "root:&#@$!iMmOrTaL4581@tcp(127.0.0.1:3308)/godb?charset=utf8mb4&parseTime=True&loc=Local"
 
 type User struct {
 	gorm.Model 
@@ -17,8 +20,8 @@ type User struct {
 	Email string		`json:"email"`
 }
 
-func initialMigration() {
-	DB, err = gorm.Open(mysql.Open(DNS), &gorm.Config())
+func InitialMigration() {
+	DB, err = gorm.Open(mysql.Open(DNS), &gorm.Config{})
 
 	if err != nil {
 		fmt.Println(err.Error())
@@ -36,7 +39,11 @@ func GetUsers(c *fiber.Ctx) error {
 func GetUser(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var user User
-	DB.Find(&user, id)
+	DB.First(&user, id)
+	// If user does not exist
+	if user.Email == "" {
+		return c.Status(500).SendString("User not available")
+	}
 	return c.JSON(&user)
 }
 
@@ -46,7 +53,7 @@ func SaveUser(c *fiber.Ctx) error {
 	if err := c.BodyParser(user); err != nil {
 		return c.Status(500).SendString(err.Error())
 	}
-	DB.Save(&user)
+	DB.Create(&user)
 	return c.JSON(&user)
 }
 

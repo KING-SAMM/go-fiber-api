@@ -18,7 +18,7 @@ func Routers(app *fiber.App) {
 }
 
 func main() {
-	user.initialMigration()
+	user.InitialMigration()
 	app := fiber.New()
 
 	app.Get("/", hello)
