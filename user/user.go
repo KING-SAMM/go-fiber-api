@@ -28,10 +28,15 @@ func initialMigration() {
 }
 
 func GetUsers(c *fiber.Ctx) error {
-
+	var users []User
+	DB.Find(&users)
+	return c.JSON(&users)
 }
 func GetUser(c *fiber.Ctx) error {
-
+	id := c.Params("id")
+	var user User
+	DB.Find(&user, id)
+	return c.JSON(&user)
 }
 func SaveUser(c *fiber.Ctx) error {
 	user := new(User)
